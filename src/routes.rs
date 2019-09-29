@@ -8,7 +8,7 @@ use rocket_contrib::json::Json;
 #[derive(Deserialize)]
 pub struct DirectoryToProcess {
     // Name of the directory on shared volume that contains images which should be processed.
-    name: String
+    name: String,
 }
 
 #[post("/", format = "application/json", data = "<req>")]
@@ -32,7 +32,7 @@ pub fn find_highlights(conf: State<ServerConf>, req: Json<DirectoryToProcess>) -
     // 404 http status.
     let items = fs::read_dir(path).map_err(|_| Status::NotFound)?;
 
-    // Iterate through each result and consider all files.
+    // Iterate through each result and consider files only.
     let items: Vec<Box<Path>> = items.into_iter()
         .filter_map(|result| result.ok().map(|item| item.path()))
         .filter(|item| item.is_file())
