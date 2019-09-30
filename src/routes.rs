@@ -45,15 +45,18 @@ pub fn find_highlights(
         .map(|file| file.into_boxed_path())
         .collect();
 
-    match producer.lock() {
-        Ok(producer) => {
-            for item in items.into_iter() {
-                producer.send(item)
-                    .map_err(|_| Status::ServiceUnavailable)?;
-            }
+    // We acquire a mutex lock, clone the producer and immediately drop the lock.
+    let producer = {
+        producer.lock()
+            .map(|original| original.clone())
+            .map_err(|_| Status::InternalServerError)?
+    };
 
-            Ok(Status::Accepted)
-        },
-        Err(_) => Err(Status::InternalServerError),
+    // We send each image path as one message. This helps the worker distribute
+    // the workload into the threadpool.
+    for item in items.into_iter() {
+        producer.send(item).map_err(|_| Status::ServiceUnavailable)?;
     }
+
+    Ok(Status::Accepted)
 }
