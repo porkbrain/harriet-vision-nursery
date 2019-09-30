@@ -8,7 +8,7 @@ extern crate rocket_contrib;
 
 mod conf;
 mod routes;
-mod worker;
+mod highlights;
 
 use std::thread;
 use dotenv::dotenv;
@@ -30,7 +30,7 @@ fn main() {
         .build()
         .expect("Couldn't build worker threadpool");
 
-    thread::spawn(move || worker::listen(consumer, pool));
+    thread::spawn(move || highlights::listen(consumer, pool));
 
     rocket::ignite()
         .mount("/highlights", routes![routes::find_highlights])

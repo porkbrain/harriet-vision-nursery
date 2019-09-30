@@ -8,7 +8,7 @@ readme = "README.md"
 
 [dependencies]
 dotenv = "0.14"
-image = "0.22"
+image = "0.21"
 rayon = "1.2"
 rocket = "0.4"
 rocket_contrib = "0.4"
