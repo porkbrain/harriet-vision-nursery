@@ -1,8 +1,10 @@
 use rocket::State;
 use conf::ServerConf;
+use std::sync::Mutex;
 use serde::Deserialize;
 use rocket::http::Status;
 use std::{fs, path::Path};
+use std::sync::mpsc::Sender;
 use rocket_contrib::json::Json;
 
 #[derive(Deserialize)]
@@ -12,7 +14,11 @@ pub struct DirectoryToProcess {
 }
 
 #[post("/", format = "application/json", data = "<req>")]
-pub fn find_highlights(conf: State<ServerConf>, req: Json<DirectoryToProcess>) -> Result<Status, Status> {
+pub fn find_highlights(
+    conf: State<ServerConf>,
+    producer: State<Mutex<Sender<Box<Path>>>>,
+    req: Json<DirectoryToProcess>,
+) -> Result<Status, Status> {
     let data_directory = &req.name;
 
     if !data_directory.chars().all(char::is_alphanumeric) {
@@ -39,5 +45,15 @@ pub fn find_highlights(conf: State<ServerConf>, req: Json<DirectoryToProcess>) -
         .map(|file| file.into_boxed_path())
         .collect();
 
-    Ok(Status::Ok)
+    match producer.lock() {
+        Ok(producer) => {
+            for item in items.into_iter() {
+                producer.send(item)
+                    .map_err(|_| Status::ServiceUnavailable)?;
+            }
+
+            Ok(Status::Accepted)
+        },
+        Err(_) => Err(Status::InternalServerError),
+    }
 }
