@@ -21,6 +21,14 @@ IMAGES_INPUT=/home/$USER/.harriet/visual/input \
 docker-compose up --build
 ```
 
+When the service is running, you can make a `POST /highlights` request with a JSON body which points to a path on shared volume. This path should be a directory with images. All images within the directory are going to be processed.
+
+```json
+{
+  "name": "path"
+}
+```
+
 ## Algorithm
 Video has to be split into images that are of given standard size. The algorithm assumes that the images are `640x360` pixels. The machine learning part will make no such assumptions and is only bound by the format of the output data from the algorithm. Therefore the algorithm can later on be replaced for a more sophisticated one should the model prove workable.
 

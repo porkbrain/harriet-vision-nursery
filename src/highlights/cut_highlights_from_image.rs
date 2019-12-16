@@ -12,8 +12,8 @@ pub fn cut_highlights_from_image(
     let higher = higher + highlight.reference;
 
     Some(image.crop(
-      (lower.x - 1) * CELL_SIZE / 2,
-      (lower.y - 1) * CELL_SIZE / 2,
+      (lower.x - 1).min(0) * CELL_SIZE / 2,
+      (lower.y - 1).min(0) * CELL_SIZE / 2,
       (higher.x - lower.x + 2) * CELL_SIZE / 2,
       (higher.y - lower.y + 2) * CELL_SIZE / 2
     ))
