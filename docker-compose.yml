@@ -10,7 +10,6 @@ services:
     environment:
       - OUTPUT=/etc/harriet/output
       - INPUT=/etc/harriet/input
-      - WORKER_THREADS=4
     volumes:
       - ${HIGHLIGHTS_OUTPUT}:/etc/harriet/output
       - ${IMAGES_INPUT}:/etc/harriet/input

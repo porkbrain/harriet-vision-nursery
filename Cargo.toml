@@ -1,6 +1,6 @@
 [package]
 name = "harriet-vision-nursery"
-version = "0.1.0"
+version = "1.0.0"
 authors = ["Michael Bausano <bausanomichal@gmail.com>"]
 description = "Simulates a simple visual attention "
 repository = "https://github.com/bausano/harriet-vision-nursery"
@@ -9,6 +9,7 @@ readme = "README.md"
 [dependencies]
 dotenv = "0.14"
 image = "0.21"
+num_cpus = "1.11"
 rayon = "1.2"
 rocket = "0.4"
 rocket_contrib = "0.4"

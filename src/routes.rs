@@ -3,12 +3,10 @@ use rocket::http::Status;
 use rocket::State;
 use rocket_contrib::json::Json;
 use serde::Deserialize;
+use std::fs;
+use std::path::{Path, PathBuf};
 use std::sync::mpsc::Sender;
 use std::sync::Mutex;
-use std::{
-    fs,
-    path::{Path, PathBuf},
-};
 
 #[derive(Deserialize)]
 pub struct DirectoryToProcess {
@@ -24,7 +22,10 @@ pub fn find_highlights(
 ) -> Result<Status, Status> {
     let data_directory = &req.name;
 
-    if !data_directory.chars().all(char::is_alphanumeric) {
+    if !data_directory
+        .chars()
+        .all(|c| char::is_alphanumeric(c) || c == '_')
+    {
         return Err(Status::UnprocessableEntity);
     }
 

@@ -11,12 +11,18 @@ impl ServerConf {
     pub fn new() -> Self {
         let input_path = env::var("INPUT").expect("Env var INPUT is missing.");
         let output_path = env::var("OUTPUT").expect("Env var OUTPUT is missing.");
-        let worker_threads_n = env::var("WORKER_THREADS")
-            .expect("Env var WORKER_THREADS is missing.")
-            .parse::<usize>()
+        let worker_threads_n: usize = env::var("WORKER_THREADS")
             .ok()
-            .filter(|n| n > &0)
-            .expect("Env var WORKER_THREADS must be >= 1 and <= 255.");
+            .and_then(|val| val.parse().ok())
+            .unwrap_or_else(|| num_cpus::get());
+
+        println!(
+            concat!(
+                "Input images are taken from directory '{:?}' and saved to ",
+                "directory '{:?}'. There are {} worker threads parsing the input."
+            ),
+            input_path, output_path, worker_threads_n
+        );
 
         Self {
             input_path,
