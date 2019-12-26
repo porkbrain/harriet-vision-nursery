@@ -28,8 +28,6 @@ pub fn find_highlights(
         return Err(Status::UnprocessableEntity);
     }
 
-    println!("hello {}", conf.input_path());
-
     let input_path: PathBuf = [conf.input_path(), data_directory].iter().collect();
     if !input_path.is_dir() {
         println!("Path {:?} is not a directory.", &input_path);
