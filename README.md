@@ -4,6 +4,14 @@ The purpose of this service is to prepare Harriet's visual sensors. In `harriet-
 
 Images result in object which we refer to as **highlights**. These highlights are persisted by the service into a Docker volume from where they can be picked up by other services. The hope is that eventually these highlights end up being analysed by Harriet's visual sensor.
 
+## Data preparation
+
+`apt install fdupes ffmpeg`
+
+`ffmpeg -i input.avi -s 640x360 -r 4 output_%05d.png`
+
+`fdupes -r output -d -N`
+
 ## Running the service
 Create the directory tree for artifacts if you run the service locally.
 ```
