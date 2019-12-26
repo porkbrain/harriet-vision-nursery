@@ -2,6 +2,7 @@ version: '3.7'
 
 services:
   harriet-vision-nursery:
+    user: ${CURRENT_UID}
     container_name: harriet-vision-nursery
     build: .
     ports:

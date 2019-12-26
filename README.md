@@ -18,6 +18,7 @@ Run the docker compose with input and output directories.
 ```
 HIGHLIGHTS_OUTPUT=/home/$USER/.harriet/visual/output \
 IMAGES_INPUT=/home/$USER/.harriet/visual/input \
+CURRENT_UID=$(id -u):$(id -g) \
 docker-compose up --build
 ```
 

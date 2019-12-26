@@ -18,7 +18,11 @@ impl ServerConf {
             .filter(|n| n > &0)
             .expect("Env var WORKER_THREADS must be >= 1 and <= 255.");
 
-        Self { input_path, output_path, worker_threads_n }
+        Self {
+            input_path,
+            output_path,
+            worker_threads_n,
+        }
     }
 
     /// Absolute path of the system directory to which the artifacts are stored.

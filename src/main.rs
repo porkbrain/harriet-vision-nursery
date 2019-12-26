@@ -1,21 +1,22 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 
-extern crate serde;
-extern crate rayon;
 extern crate dotenv;
+extern crate rayon;
 extern crate rocket_contrib;
-#[macro_use] extern crate rocket;
+extern crate serde;
+#[macro_use]
+extern crate rocket;
 
 mod conf;
-mod routes;
 mod highlights;
+mod routes;
 
-use std::thread;
 use dotenv::dotenv;
-use std::path::Path;
-use std::sync::Mutex;
 use rayon::ThreadPoolBuilder;
+use std::path::Path;
 use std::sync::mpsc::channel;
+use std::sync::Mutex;
+use std::thread;
 
 fn main() {
     dotenv().ok();
